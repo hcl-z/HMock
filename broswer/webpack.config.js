@@ -1,13 +1,15 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
-
   entry: path.join(__dirname, 'index'),
   output: {
     path: path.join(__dirname, 'dist'),
     publicPath: '/',
-    filename: 'js/[contenthash].[name].js',
+    filename: 'js/[name].[hash:6].js',
+    clean: true,
   },
   module: {
     rules: [{
@@ -15,8 +17,25 @@ module.exports = {
       exclude: [
         path.resolve(__dirname, 'node_modules'),
       ],
-      loader: 'babel-loader',
-    }],
+      use: {
+        loader: 'babel-loader',
+        options: {
+          cacheDirectory: true,
+        },
+      },
+    },
+    {
+      test: /.css$/,
+      include: [
+        path.resolve(__dirname, 'src'),
+      ],
+      use: ['style-loader', 'css-loader'],
+    },
+    {
+      test: /\.(png|svg|jpg|jpeg|gif)$/i,
+      type: 'asset/resource',
+    },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -28,6 +47,15 @@ module.exports = {
     splitChunks: {
       chunks: 'all',
       name: 'vendor',
+    },
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        extractComments: false,
+      }),
+    ],
+    runtimeChunk: {
+      name: (entrypoint) => `runtime~${entrypoint.name}`,
     },
   },
   resolve: {
