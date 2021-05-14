@@ -1,1 +1,0 @@
-(self.webpackChunkhmock_broswer=self.webpackChunkhmock_broswer||[]).push([[179],{51:(e,r,t)=>{"use strict";var n=t(294);const c=function(){return n.createElement("div",null,"hello11111")};t(935).render(n.createElement(c,null),document.querySelector("#app"))}},e=>{"use strict";e.O(0,[736],(()=>{return r=51,e(e.s=r);var r}));e.O()}]);
